@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Light my fractal</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				color: #ffffff;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				font-weight: bold;
+
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+			}
+
+			a {
+
+				color: #ffffff;
+			}
+
+			#oldie a { color:#da0 }
+		</style>
+	</head>
+	<body>
+
+		<div id="container"></div>
+		<div id="info"><a href="https://www.facebook.com/michael.hurtado" target="_blank" rel="noopener">Light my fractal by Michael Hurtado</a></div>
+
+		<script src="js/three.js"></script>
+		<script src="js/Detector.js"></script>
+		<script src="js/stats.min.js"></script>
+
+		<script id="vertexShader" type="x-shader/x-vertex">
+
+			void main()	{
+
+				gl_Position = vec4( position, 1.0 );
+
+			}
+
+		</script>
+
+		<script id="fragmentShader" type="x-shader/x-fragment">
+
+			precision mediump float;uniform float time;uniform vec2 mouse;uniform vec2 resolution;
+			vec2 CircleInversion(vec2 vPos, vec2 vOrigin, float fRadius){vec2 vOP = vPos - vOrigin;vOrigin = vOrigin - vOP * fRadius * fRadius / dot(vOP, vOP);vOrigin.x += sin(vOrigin.x * 0.04)+tan(mouse.x*0.1);vOrigin.y -= cos(vOrigin.y* 0.01);return vOrigin;}
+
+			float Parabola( float x, float n ){return pow( 3.8*x*(0.4-x), n );}
+
+			void main()	{vec2 vPos = gl_FragCoord.xy / resolution.xy;vPos = vPos - 0.5;vPos.x *= resolution.x / resolution.y;vec2 vScale = vec2(1.2);vec2 vOffset = vec2( sin(time * 0.123), atan(time * 0.0567));float l = 0.0;float minl = 10000.0;
+				for(int i=0; i<48; i++){vPos.x = abs(vPos.x);vPos = vPos * vScale + vOffset;vPos = CircleInversion(vPos, vec2(0.5, 0.5), 0.9);l = length(vPos);minl = min(l, minl);}
+				float t = 4.1 + time * 0.055;vec3 vBaseColour = normalize(vec3(sin(t * 1.790*mouse.y), sin(t * 1.345*mouse.y), sin(t * 1.123*mouse.y)) * 0.5 + 0.5);float fBrightness = 11.0;vec3 vColour = vBaseColour * l * l * fBrightness;minl = Parabola(minl, 5.0);vColour *= minl + 0.1;vColour = 1.0 - exp(-vColour);gl_FragColor = vec4(vColour,1.0);}
+
+		</script>
+
+		<script>
+
+			var _0x9b25=["\x77\x65\x62\x67\x6C","\x61\x64\x64\x47\x65\x74\x57\x65\x62\x47\x4C\x4D\x65\x73\x73\x61\x67\x65","\x63\x6F\x6E\x74\x61\x69\x6E\x65\x72","\x67\x65\x74\x45\x6C\x65\x6D\x65\x6E\x74\x42\x79\x49\x64","\x7A","\x70\x6F\x73\x69\x74\x69\x6F\x6E","\x74\x65\x78\x74\x43\x6F\x6E\x74\x65\x6E\x74","\x76\x65\x72\x74\x65\x78\x53\x68\x61\x64\x65\x72","\x66\x72\x61\x67\x6D\x65\x6E\x74\x53\x68\x61\x64\x65\x72","\x61\x64\x64","\x64\x65\x76\x69\x63\x65\x50\x69\x78\x65\x6C\x52\x61\x74\x69\x6F","\x73\x65\x74\x50\x69\x78\x65\x6C\x52\x61\x74\x69\x6F","\x64\x6F\x6D\x45\x6C\x65\x6D\x65\x6E\x74","\x61\x70\x70\x65\x6E\x64\x43\x68\x69\x6C\x64","\x64\x6F\x6D","\x6D\x6F\x75\x73\x65\x6D\x6F\x76\x65","\x61\x64\x64\x45\x76\x65\x6E\x74\x4C\x69\x73\x74\x65\x6E\x65\x72","\x72\x65\x73\x69\x7A\x65","\x69\x6E\x6E\x65\x72\x57\x69\x64\x74\x68","\x69\x6E\x6E\x65\x72\x48\x65\x69\x67\x68\x74","\x73\x65\x74\x53\x69\x7A\x65","\x78","\x76\x61\x6C\x75\x65","\x72\x65\x73\x6F\x6C\x75\x74\x69\x6F\x6E","\x77\x69\x64\x74\x68","\x79","\x68\x65\x69\x67\x68\x74","\x67\x65\x74\x42\x6F\x75\x6E\x64\x69\x6E\x67\x43\x6C\x69\x65\x6E\x74\x52\x65\x63\x74","\x6D\x6F\x75\x73\x65","\x63\x6C\x69\x65\x6E\x74\x58","\x6C\x65\x66\x74","\x63\x6C\x69\x65\x6E\x74\x57\x69\x64\x74\x68","\x63\x6C\x69\x65\x6E\x74\x59","\x74\x6F\x70","\x63\x6C\x69\x65\x6E\x74\x48\x65\x69\x67\x68\x74","\x75\x70\x64\x61\x74\x65","\x74\x69\x6D\x65","\x72\x65\x6E\x64\x65\x72"];if(!Detector[_0x9b25[0]]){Detector[_0x9b25[1]]()};var container,stats;var camera,scene,renderer;var uniforms;init();animate();function init(){container= document[_0x9b25[3]](_0x9b25[2]);camera=  new THREE.Camera();camera[_0x9b25[5]][_0x9b25[4]]= 1;scene=  new THREE.Scene();var _0x9cfex8= new THREE.PlaneBufferGeometry(2,2);uniforms= {time:{value:1.0},resolution:{value: new THREE.Vector2()},mouse:{value: new THREE.Vector2()}};var _0x9cfex9= new THREE.ShaderMaterial({uniforms:uniforms,vertexShader:document[_0x9b25[3]](_0x9b25[7])[_0x9b25[6]],fragmentShader:document[_0x9b25[3]](_0x9b25[8])[_0x9b25[6]]});var _0x9cfexa= new THREE.Mesh(_0x9cfex8,_0x9cfex9);scene[_0x9b25[9]](_0x9cfexa);renderer=  new THREE.WebGLRenderer();renderer[_0x9b25[11]](window[_0x9b25[10]]);container[_0x9b25[13]](renderer[_0x9b25[12]]);stats=  new Stats();container[_0x9b25[13]](stats[_0x9b25[14]]);onWindowResize();renderer[_0x9b25[12]][_0x9b25[16]](_0x9b25[15],recordMousePosition);window[_0x9b25[16]](_0x9b25[17],onWindowResize,false)}function onWindowResize(_0x9cfexc){renderer[_0x9b25[20]](window[_0x9b25[18]],window[_0x9b25[19]]);uniforms[_0x9b25[23]][_0x9b25[22]][_0x9b25[21]]= renderer[_0x9b25[12]][_0x9b25[24]];uniforms[_0x9b25[23]][_0x9b25[22]][_0x9b25[25]]= renderer[_0x9b25[12]][_0x9b25[26]]}function recordMousePosition(_0x9cfexe){var _0x9cfexf=renderer[_0x9b25[12]];var _0x9cfex10=_0x9cfexf[_0x9b25[27]]();uniforms[_0x9b25[28]][_0x9b25[22]][_0x9b25[21]]= (_0x9cfexe[_0x9b25[29]]- _0x9cfex10[_0x9b25[30]])/ _0x9cfexf[_0x9b25[31]]* 2- 1;uniforms[_0x9b25[28]][_0x9b25[22]][_0x9b25[25]]= (_0x9cfexe[_0x9b25[32]]- _0x9cfex10[_0x9b25[33]])/ _0x9cfexf[_0x9b25[34]]*  -2+ 1}function animate(){requestAnimationFrame(animate);render();stats[_0x9b25[35]]()}function render(){uniforms[_0x9b25[36]][_0x9b25[22]]+= 0.05;renderer[_0x9b25[37]](scene,camera)}
+
+		</script>
+
+	</body>
+</html>
